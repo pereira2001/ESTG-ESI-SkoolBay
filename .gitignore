@@ -31,3 +31,7 @@ prisma/generated/
 # Scripts (não necessários no repo)
 *.sh
 node_modules/
+
+# Avatares de utilizadores (ficheiros locais)
+/public/avatars/*
+!/public/avatars/.gitkeep

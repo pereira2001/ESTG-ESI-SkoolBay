@@ -2,7 +2,7 @@ import { auth } from '@/auth'
 import { NextResponse } from 'next/server'
 import type { NextAuthRequest } from 'next-auth'
 
-const protectedRoutes = ['/dashboard', '/services/new', '/profile/edit']
+const protectedRoutes = ['/dashboard', '/services/new']
 const adminRoutes = ['/admin']
 const authRoutes = ['/login', '/register']
 

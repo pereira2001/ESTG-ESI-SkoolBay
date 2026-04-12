@@ -41,6 +41,7 @@ model User {
   course        String?
   bio           String?
   avatarUrl     String?
+  skills        String[]  @default([])
   rating        Float     @default(0)
   role          Role      @default(USER)
   isActive      Boolean   @default(true)
