@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 export default function HomePage() {
   return (
@@ -9,12 +10,8 @@ export default function HomePage() {
         O SkoolBay é o marketplace de serviços entre estudantes universitários. Tutoria, design, tradução, código — tudo numa plataforma.
       </p>
       <div className="flex gap-4 justify-center">
-        <Button asChild size="lg">
-          <Link href="/register">Começar agora</Link>
-        </Button>
-        <Button asChild size="lg" variant="outline">
-          <Link href="/services">Ver serviços</Link>
-        </Button>
+        <Link href="/register" className={cn(buttonVariants({ size: 'lg' }))}>Começar agora</Link>
+        <Link href="/services" className={cn(buttonVariants({ size: 'lg', variant: 'outline' }))}>Ver serviços</Link>
       </div>
     </div>
   )

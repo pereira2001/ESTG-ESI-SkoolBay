@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema, type RegisterInput } from '@/lib/validations/auth'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -46,9 +47,7 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button asChild className="w-full" variant="outline">
-            <Link href="/login">Ir para o login</Link>
-          </Button>
+          <Link href="/login" className={cn(buttonVariants({ variant: 'outline' }), 'w-full')}>Ir para o login</Link>
         </CardContent>
       </Card>
     )

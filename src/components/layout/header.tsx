@@ -10,7 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { LayoutDashboard, LogOut, User } from 'lucide-react'
 
 function getInitials(name?: string | null): string {
@@ -37,25 +38,23 @@ export function Header() {
             <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
           ) : session?.user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                  <Avatar size="sm">
-                    <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? ''} />
-                    <AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
-                  </Avatar>
-                  <span className="hidden md:block text-sm font-medium">
-                    {session.user.name?.split(' ')[0]}
-                  </span>
-                </button>
+              <DropdownMenuTrigger className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <Avatar size="sm">
+                  <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? ''} />
+                  <AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
+                </Avatar>
+                <span className="hidden md:block text-sm font-medium">
+                  {session.user.name?.split(' ')[0]}
+                </span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="flex items-center gap-2">
+                <DropdownMenuItem>
+                  <Link href="/dashboard" className="flex w-full items-center gap-2">
                     <LayoutDashboard className="h-4 w-4" />Dashboard
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={`/profile/${session.user.id}`} className="flex items-center gap-2">
+                <DropdownMenuItem>
+                  <Link href={`/profile/${session.user.id}`} className="flex w-full items-center gap-2">
                     <User className="h-4 w-4" />Perfil
                   </Link>
                 </DropdownMenuItem>
@@ -70,8 +69,8 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild><Link href="/login">Entrar</Link></Button>
-              <Button size="sm" asChild><Link href="/register">Registar</Link></Button>
+              <Link href="/login" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>Entrar</Link>
+              <Link href="/register" className={cn(buttonVariants({ size: 'sm' }))}>Registar</Link>
             </div>
           )}
         </div>
