@@ -1,2 +1,33 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Build
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Prisma
+prisma/generated/
+
+# IDE
+.vscode/
+.idea/
+
+# Scripts (não necessários no repo)
 *.sh
+node_modules/

@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: skoolbay_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: skoolbay
+      POSTGRES_PASSWORD: skoolbay_dev
+      POSTGRES_DB: skoolbay
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U skoolbay"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: skoolbay_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://skoolbay:skoolbay_dev@db:5432/skoolbay
+      NEXTAUTH_URL: http://localhost:3002
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+    ports:
+      - "3002:3000"
+
+volumes:
+  postgres_data:
