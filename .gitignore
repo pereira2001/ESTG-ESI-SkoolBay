@@ -30,3 +30,4 @@ prisma/generated/
 
 # Scripts (não necessários no repo)
 *.sh
+node_modules/
