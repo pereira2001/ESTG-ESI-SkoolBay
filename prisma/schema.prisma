@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+enum ReportStatus {
+  PENDING
+  RESOLVED
+  DISMISSED
+}
+
+enum ReportTargetType {
+  SERVICE
+  USER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+  university    String?
+  course        String?
+  bio           String?
+  avatarUrl     String?
+  rating        Float     @default(0)
+  role          Role      @default(USER)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  verifyToken       String?   @unique
+  verifyTokenExpiry DateTime?
+
+  services        Service[]
+  requestsAsBuyer ServiceRequest[] @relation("BuyerRequests")
+  reportsCreated  Report[]         @relation("ReporterReports")
+
+  @@map("users")
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  icon     String?
+  services Service[]
+
+  @@map("categories")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  requests   ServiceRequest[]
+  reports    Report[]  @relation("ServiceReports")
+
+  @@map("services")
+}
+
+model ServiceRequest {
+  id        String        @id @default(cuid())
+  message   String
+  status    RequestStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  buyerId   String
+  buyer     User    @relation("BuyerRequests", fields: [buyerId], references: [id], onDelete: Cascade)
+  review    Review?
+
+  @@map("service_requests")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  requestId String         @unique
+  request   ServiceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Report {
+  id          String           @id @default(cuid())
+  reason      String
+  description String
+  targetType  ReportTargetType
+  targetId    String
+  status      ReportStatus     @default(PENDING)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  reporterId String
+  reporter   User     @relation("ReporterReports", fields: [reporterId], references: [id], onDelete: Cascade)
+  service    Service? @relation("ServiceReports", fields: [targetId], references: [id], map: "report_service_fk")
+
+  @@map("reports")
+}
