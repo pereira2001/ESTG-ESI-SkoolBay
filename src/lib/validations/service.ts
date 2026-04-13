@@ -4,7 +4,8 @@ export const createServiceSchema = z.object({
   title: z.string().min(5, 'Título deve ter pelo menos 5 caracteres').max(100),
   description: z.string().min(20, 'Descrição deve ter pelo menos 20 caracteres').max(2000),
   price: z.number().positive('Preço deve ser maior que 0'),
-  categoryId: z.string().cuid().optional(),
+  categoryId: z.string().cuid().optional().or(z.literal('')),
+  isActive: z.boolean(),
 })
 
 export const updateServiceSchema = createServiceSchema.partial()

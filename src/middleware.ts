@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import type { NextAuthRequest } from 'next-auth'
 
 const protectedRoutes = ['/dashboard', '/services/new']
+const protectedPatterns = [/^\/services\/[^/]+\/edit$/]
 const adminRoutes = ['/admin']
 const authRoutes = ['/login', '/register']
 
@@ -11,7 +12,9 @@ export default auth((req: NextAuthRequest) => {
   const session = req.auth
   const isLoggedIn = !!session
 
-  const isProtected = protectedRoutes.some((r) => nextUrl.pathname.startsWith(r))
+  const isProtected =
+    protectedRoutes.some((r) => nextUrl.pathname.startsWith(r)) ||
+    protectedPatterns.some((p) => p.test(nextUrl.pathname))
   const isAdmin = adminRoutes.some((r) => nextUrl.pathname.startsWith(r))
   const isAuthRoute = authRoutes.some((r) => nextUrl.pathname.startsWith(r))
 
