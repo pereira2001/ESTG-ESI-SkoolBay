@@ -10,8 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { LayoutDashboard, LogOut, User } from 'lucide-react'
 
 function getInitials(name?: string | null): string {
@@ -24,13 +22,13 @@ export function Header() {
   const isLoading = status === 'loading'
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full bg-brand border-b border-brand-dark">
       <div className="max-w-6xl mx-auto flex h-14 items-center justify-between px-4">
-        <Link href="/" className="font-bold text-lg tracking-tight">SkoolBay</Link>
+        <Link href="/" className="font-medium text-lg tracking-tight text-white">SkoolBay</Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-          <Link href="/services" className="hover:text-foreground transition-colors">Serviços</Link>
-          <Link href="/about" className="hover:text-foreground transition-colors">Sobre</Link>
+        <nav className="hidden md:flex items-center gap-6 text-sm">
+          <Link href="/services" className="text-white/80 hover:text-white transition-colors">Serviços</Link>
+          <Link href="/about" className="text-white/80 hover:text-white transition-colors">Sobre</Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -38,12 +36,12 @@ export function Header() {
             <div className="h-8 w-8 rounded-full bg-muted animate-pulse" />
           ) : session?.user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              <DropdownMenuTrigger className="flex items-center gap-2 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white">
                 <Avatar size="sm">
                   <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? ''} />
                   <AvatarFallback>{getInitials(session.user.name)}</AvatarFallback>
                 </Avatar>
-                <span className="hidden md:block text-sm font-medium">
+                <span className="hidden md:block text-sm font-medium text-white">
                   {session.user.name?.split(' ')[0]}
                 </span>
               </DropdownMenuTrigger>
@@ -69,8 +67,18 @@ export function Header() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Link href="/login" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>Entrar</Link>
-              <Link href="/register" className={cn(buttonVariants({ size: 'sm' }))}>Registar</Link>
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center rounded-md border border-white/60 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10 transition-colors"
+              >
+                Entrar
+              </Link>
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center rounded-md bg-white px-3 py-1.5 text-sm font-medium text-brand hover:bg-white/90 transition-colors"
+              >
+                Registar
+              </Link>
             </div>
           )}
         </div>
