@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LayoutDashboard, LogOut, User } from 'lucide-react'
+import { LayoutDashboard, LogOut, User, ShieldAlert } from 'lucide-react'
 
 function getInitials(name?: string | null): string {
   if (!name) return '?'
@@ -56,6 +56,16 @@ export function Header() {
                     <User className="h-4 w-4" />Perfil
                   </Link>
                 </DropdownMenuItem>
+                {session.user.role === 'ADMIN' && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link href="/admin/reports" className="flex w-full items-center gap-2 text-amber-600">
+                        <ShieldAlert className="h-4 w-4" />Moderação
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="flex items-center gap-2 text-red-600 focus:text-red-600"

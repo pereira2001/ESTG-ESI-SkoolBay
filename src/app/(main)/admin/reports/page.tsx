@@ -28,8 +28,7 @@ interface PageProps {
 
 export default async function AdminReportsPage({ searchParams }: PageProps) {
   const session = await auth()
-  const role = (session?.user as { role?: string } | undefined)?.role
-  if (!session?.user?.id || role !== 'ADMIN') redirect('/login')
+  if (!session?.user?.id || session.user.role !== 'ADMIN') redirect('/login')
 
   const rawStatus = searchParams.status
   const statusFilter =

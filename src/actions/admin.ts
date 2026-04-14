@@ -8,8 +8,7 @@ type ActionResult = { success: true } | { success: false; error: string }
 
 async function assertAdmin(): Promise<string | null> {
   const session = await auth()
-  const role = (session?.user as { role?: string } | undefined)?.role
-  if (!session?.user?.id || role !== 'ADMIN') return null
+  if (!session?.user?.id || session.user.role !== 'ADMIN') return null
   return session.user.id
 }
 
