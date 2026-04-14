@@ -44,6 +44,7 @@ export default async function MyRequestsPage({ searchParams }: PageProps) {
       message: true,
       status: true,
       createdAt: true,
+      review: { select: { id: true } },
       service: {
         select: {
           id: true,
