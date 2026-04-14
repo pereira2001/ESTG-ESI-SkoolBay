@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { ServiceCard } from '@/components/services/service-card'
 import { ServicesFilters } from '@/components/services/services-filters'
+import { CategoriesGrid } from '@/components/services/categories-grid'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -70,7 +71,10 @@ export default async function ServicesPage({ searchParams }: PageProps) {
       },
     }),
     prisma.service.count({ where }),
-    prisma.category.findMany({ orderBy: { name: 'asc' } }),
+    prisma.category.findMany({
+      orderBy: { name: 'asc' },
+      include: { _count: { select: { services: { where: { isActive: true } } } } },
+    }),
   ])
 
   const totalPages = Math.ceil(total / LIMIT)
@@ -93,6 +97,17 @@ export default async function ServicesPage({ searchParams }: PageProps) {
         <p className="text-muted-foreground mt-1">
           Explora os serviços disponíveis na comunidade SkoolBay
         </p>
+      </div>
+
+      {/* Categories grid */}
+      <div className="mb-8">
+        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+          Explorar por categoria
+        </h2>
+        <CategoriesGrid
+          categories={categories}
+          activeCategoryId={categoryId || undefined}
+        />
       </div>
 
       {/* Filters — wrapped in Suspense because ServicesFilters uses useSearchParams */}

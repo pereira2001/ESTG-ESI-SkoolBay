@@ -7,21 +7,23 @@ async function main() {
   console.log('🌱 A correr seed...')
 
   const categories = [
-    { name: 'Ciências', slug: 'ciencias', icon: '🔬' },
-    { name: 'Tecnologia', slug: 'tecnologia', icon: '💻' },
-    { name: 'Artes', slug: 'artes', icon: '🎨' },
-    { name: 'Idiomas', slug: 'idiomas', icon: '🌍' },
-    { name: 'Escrita', slug: 'escrita', icon: '✍️' },
-    { name: 'Design', slug: 'design', icon: '🖌️' },
-    { name: 'Música', slug: 'musica', icon: '🎵' },
-    { name: 'Desporto', slug: 'desporto', icon: '⚽' },
-    { name: 'Outro', slug: 'outro', icon: '📦' },
+    { name: 'Tecnologia', slug: 'tecnologia', icon: 'Laptop' },
+    { name: 'Design', slug: 'design', icon: 'Palette' },
+    { name: 'Idiomas', slug: 'idiomas', icon: 'Languages' },
+    { name: 'Tutoria', slug: 'tutoria', icon: 'GraduationCap' },
+    { name: 'Música', slug: 'musica', icon: 'Music' },
+    { name: 'Fotografia', slug: 'fotografia', icon: 'Camera' },
+    { name: 'Escrita', slug: 'escrita', icon: 'PenLine' },
+    { name: 'Outros', slug: 'outros', icon: 'Package' },
+    { name: 'Ciências', slug: 'ciencias', icon: 'FlaskConical' },
+    { name: 'Artes', slug: 'artes', icon: 'Brush' },
+    { name: 'Desporto', slug: 'desporto', icon: 'Trophy' },
   ]
 
   for (const cat of categories) {
     await prisma.category.upsert({
       where: { slug: cat.slug },
-      update: {},
+      update: { icon: cat.icon },
       create: cat,
     })
   }
