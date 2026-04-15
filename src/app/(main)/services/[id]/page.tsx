@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Separator } from '@/components/ui/separator'
 import { ServiceActions } from '@/components/services/service-actions'
+import { ReportModal } from '@/components/report/report-modal'
 import { Euro, Star, CheckCircle2, XCircle } from 'lucide-react'
 
 interface ServicePageProps {
@@ -95,6 +96,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
   const isOwner = session?.user?.id === service.userId
   const isAuthenticated = !!session?.user
+  const canReport = isAuthenticated && !isOwner
 
   const reviews = service.requests.flatMap((r) =>
     r.review
@@ -153,11 +155,16 @@ export default async function ServicePage({ params }: ServicePageProps) {
       </div>
 
       {/* Ação principal */}
-      <ServiceActions
-        serviceId={service.id}
-        isOwner={isOwner}
-        isAuthenticated={isAuthenticated}
-      />
+      <div className="flex items-center gap-3">
+        <ServiceActions
+          serviceId={service.id}
+          isOwner={isOwner}
+          isAuthenticated={isAuthenticated}
+        />
+        {canReport && (
+          <ReportModal targetType="SERVICE" targetId={service.id} />
+        )}
+      </div>
 
       <Separator />
 

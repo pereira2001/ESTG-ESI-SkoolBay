@@ -1,13 +1,14 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { RequestStatusBadge } from './request-status-badge'
+import { ReviewForm } from './review-form'
 import { cancelRequest } from '@/actions/requests'
-import { ExternalLink, User, XCircle } from 'lucide-react'
+import { ExternalLink, User, XCircle, Star } from 'lucide-react'
 import type { RequestStatus } from '@prisma/client'
 
 interface SentRequestCardProps {
@@ -16,6 +17,7 @@ interface SentRequestCardProps {
     message: string
     status: RequestStatus
     createdAt: Date
+    review: { id: string } | null
     service: {
       id: string
       title: string
@@ -38,7 +40,10 @@ function formatDate(date: Date): string {
 
 export function SentRequestCard({ request }: SentRequestCardProps) {
   const [isPending, startTransition] = useTransition()
+  const [showReview, setShowReview] = useState(false)
+  const [reviewed, setReviewed] = useState(!!request.review)
   const canCancel = request.status === 'PENDING' || request.status === 'ACCEPTED'
+  const canReview = request.status === 'COMPLETED' && !reviewed
 
   function handleCancel() {
     startTransition(async () => {
@@ -49,6 +54,11 @@ export function SentRequestCard({ request }: SentRequestCardProps) {
         toast.success('Pedido cancelado.')
       }
     })
+  }
+
+  function handleReviewed() {
+    setReviewed(true)
+    setShowReview(false)
   }
 
   return (
@@ -105,6 +115,32 @@ export function SentRequestCard({ request }: SentRequestCardProps) {
             {isPending ? 'A cancelar...' : 'Cancelar pedido'}
           </Button>
         </div>
+      )}
+
+      {/* Avaliar */}
+      {canReview && (
+        <div className="pt-1">
+          {showReview ? (
+            <ReviewForm requestId={request.id} onSuccess={handleReviewed} />
+          ) : (
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setShowReview(true)}
+              className="gap-1.5"
+            >
+              <Star className="h-3.5 w-3.5" />
+              Avaliar prestador
+            </Button>
+          )}
+        </div>
+      )}
+
+      {reviewed && request.status === 'COMPLETED' && (
+        <p className="pt-1 text-xs text-muted-foreground flex items-center gap-1">
+          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+          Avaliação submetida
+        </p>
       )}
     </div>
   )

@@ -31,6 +31,14 @@ async function fetchUser(id: string) {
           price: true,
           createdAt: true,
           category: { select: { name: true, slug: true } },
+          requests: {
+            where: { review: { isNot: null } },
+            orderBy: { createdAt: 'desc' },
+            select: {
+              buyer: { select: { name: true, avatarUrl: true } },
+              review: { select: { rating: true, comment: true, createdAt: true } },
+            },
+          },
         },
         orderBy: { createdAt: 'desc' },
       },
@@ -54,6 +62,39 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   if (!user) notFound()
 
   const isOwner = session?.user?.id === user.id
+  const isAuthenticated = !!session?.user
+  const viewerIsNotOwner = isAuthenticated && !isOwner
 
-  return <ProfilePageClient user={user} isOwner={isOwner} />
+  // Flatten reviews across all services, sorted by date desc
+  const reviews = user.services
+    .flatMap((s) =>
+      s.requests.flatMap((r) =>
+        r.review
+          ? [{ buyer: r.buyer, rating: r.review.rating, comment: r.review.comment, createdAt: r.review.createdAt }]
+          : [],
+      ),
+    )
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0
+
+  // Strip requests from services before passing to client
+  const userForClient = {
+    ...user,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    services: user.services.map(({ requests: _requests, ...s }) => s),
+  }
+
+  return (
+    <ProfilePageClient
+      user={userForClient}
+      isOwner={isOwner}
+      canReport={viewerIsNotOwner}
+      reviews={reviews}
+      averageRating={averageRating}
+    />
+  )
 }
