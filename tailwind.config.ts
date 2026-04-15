@@ -52,6 +52,13 @@ const config: Config = {
           border: "var(--sidebar-border)",
           ring: "var(--sidebar-ring)",
         },
+        brand: {
+          DEFAULT: '#7F77DD',
+          dark: '#534AB7',
+          darker: '#3C3489',
+          light: '#EEEDFE',
+          border: '#AFA9EC',
+        },
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",
