@@ -51,6 +51,21 @@ export async function POST(req: NextRequest) {
     }
 
     const { name, email, password, university, course } = parsed.data
+    const domain = email.split('@')[1]?.toLowerCase()
+
+    const allowed = await prisma.institutionalDomain.findFirst({
+      where: {
+        isActive: true,
+        OR: [{ domain }, { domain: { endsWith: `.${domain}` } }],
+      },
+    })
+
+    if (!allowed) {
+      return NextResponse.json(
+        { error: 'E-mail institucional não reconhecido. Contacta o administrador.' },
+        { status: 400 }
+      )
+    }
 
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) {

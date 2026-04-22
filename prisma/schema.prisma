@@ -115,6 +115,16 @@ model Review {
   @@map("reviews")
 }
 
+model InstitutionalDomain {
+  id        String   @id @default(cuid())
+  domain    String   @unique
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("institutional_domains")
+}
+
 model Report {
   id          String           @id @default(cuid())
   reason      String
