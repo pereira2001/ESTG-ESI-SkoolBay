@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
+import { toast } from 'sonner'
 import { removeModerator } from './actions'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -24,7 +25,11 @@ export function ModeratorRow({ user }: ModeratorRowProps) {
 
   function handleRemove() {
     if (!confirm(`Remover "${user.name}" como moderador? O utilizador voltará ao papel de utilizador comum.`)) return
-    startTransition(() => removeModerator(user.id))
+    startTransition(async () => {
+      const result = await removeModerator(user.id)
+      if (result?.success) toast.success('Moderador removido.')
+      else toast.error(result?.error ?? 'Erro ao remover moderador.')
+    })
   }
 
   return (

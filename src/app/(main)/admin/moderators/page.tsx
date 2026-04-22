@@ -3,10 +3,10 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/prisma'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ModeratorRow } from './moderator-row'
-import { addModerator } from './actions'
+import { AddModeratorForm } from './add-moderator-form'
 
 export const dynamic = 'force-dynamic'
 
@@ -85,24 +85,7 @@ export default async function AdminModeratorsPage() {
         </table>
       </div>
 
-      <div className="rounded-lg border p-6">
-        <h2 className="text-lg font-semibold mb-1">Adicionar moderador</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          O utilizador tem de ter conta ativa e email institucional registado.
-        </p>
-        <form action={addModerator} className="flex flex-col sm:flex-row gap-3">
-          <input
-            name="email"
-            type="email"
-            placeholder="utilizador@universidade.pt"
-            required
-            className="flex-1 h-9 rounded-lg border border-input bg-transparent px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
-          />
-          <Button type="submit" size="sm">
-            Adicionar
-          </Button>
-        </form>
-      </div>
+      <AddModeratorForm />
     </div>
   )
 }
