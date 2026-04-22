@@ -6,6 +6,23 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 A correr seed...')
 
+  const adminPassword = await bcrypt.hash('skoolbay', 12)
+  await prisma.user.upsert({
+    where: { email: 'administrator@skoolbay.com' },
+    update: {},
+    create: {
+      name: 'Administrator',
+      email: 'administrator@skoolbay.com',
+      password: adminPassword,
+      emailVerified: new Date(),
+      isActive: true,
+      role: 'ADMIN',
+      university: 'SkoolBay',
+      course: 'Administração',
+    },
+  })
+  console.log('Admin criado: administrator@skoolbay.com / skoolbay')
+
   const categories = [
     { name: 'Tecnologia', slug: 'tecnologia', icon: 'Laptop' },
     { name: 'Design', slug: 'design', icon: 'Palette' },
@@ -29,14 +46,34 @@ async function main() {
   }
   console.log('✅ Categorias criadas')
 
-  const adminPassword = await bcrypt.hash('Admin123!', 12)
+  const domains = [
+    { domain: 'estudantes.piaget.pt', name: 'Instituto Piaget' },
+    { domain: 'alunos.piaget.pt', name: 'Instituto Piaget' },
+    { domain: 'ipleiria.pt', name: 'Instituto Politécnico de Leiria' },
+    { domain: 'iscte.pt', name: 'ISCTE' },
+    { domain: 'ulisboa.pt', name: 'Universidade de Lisboa' },
+    { domain: 'up.pt', name: 'Universidade do Porto' },
+    { domain: 'uminho.pt', name: 'Universidade do Minho' },
+    { domain: 'ua.pt', name: 'Universidade de Aveiro' },
+    { domain: 'uc.pt', name: 'Universidade de Coimbra' },
+  ]
+  for (const d of domains) {
+    await prisma.institutionalDomain.upsert({
+      where: { domain: d.domain },
+      update: {},
+      create: d,
+    })
+  }
+  console.log('✅ Domínios institucionais criados')
+
+  const piageAdminPassword = await bcrypt.hash('Admin123!', 12)
   await prisma.user.upsert({
     where: { email: 'admin@estudantes.piaget.pt' },
     update: {},
     create: {
       name: 'Admin SkoolBay',
       email: 'admin@estudantes.piaget.pt',
-      password: adminPassword,
+      password: piageAdminPassword,
       emailVerified: new Date(),
       university: 'Instituto Piaget',
       course: 'Engenharia Informática',

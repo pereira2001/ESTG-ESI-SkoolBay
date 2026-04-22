@@ -1,0 +1,25 @@
+# 1. Garantir que estás atualizado
+git pull origin main
+
+# 2. Criar e mudar para nova branch
+git checkout -b tipo/descricao
+# exemplos: feat/auth, docs/visao, chore/gitignore, fix/login
+
+# 3. Fazer as alterações nos ficheiros
+
+# 4. Adicionar e commitar
+git add .
+git commit -m "tipo: descrição curta do que fizeste"
+
+# 5. Push da branch
+git push origin tipo/descricao
+
+gh pr create --title "docs: Product Backlog com User Stories" \
+  --body "Fecha #8 — Product Backlog com 20 User Stories priorizadas (MoSCoW), story points e acceptance criteria." \
+  --base main
+
+# 6. Abrir PR no GitHub e pedir aprovação
+# 7. Após aprovação, fazer merge no GitHub
+# 8. Voltar à main localmente
+git checkout main
+git pull origin main

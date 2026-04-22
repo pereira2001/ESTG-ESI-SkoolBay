@@ -1,31 +1,8 @@
 import { z } from 'zod'
 
-const INSTITUTIONAL_DOMAINS = [
-  'estudantes.piaget.pt',
-  'alunos.piaget.pt',
-  'piaget.pt',
-  'edu',
-  'ac.pt',
-  'ipleiria.pt',
-  'iscte.pt',
-  'ulisboa.pt',
-  'up.pt',
-  'uminho.pt',
-  'ua.pt',
-  'uc.pt',
-]
-
-function isInstitutionalEmail(email: string): boolean {
-  const domain = email.split('@')[1]?.toLowerCase() ?? ''
-  return INSTITUTIONAL_DOMAINS.some((d) => domain === d || domain.endsWith(`.${d}`))
-}
-
 export const registerSchema = z.object({
   name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z
-    .string()
-    .email('E-mail inválido')
-    .refine(isInstitutionalEmail, 'É necessário um e-mail institucional universitário'),
+  email: z.string().email('E-mail inválido'),
   password: z
     .string()
     .min(8, 'Password deve ter pelo menos 8 caracteres')
