@@ -1,0 +1,4 @@
+O projeto escolhido pelo grupo é o SkoolBay, uma plataforma web de marketplace de serviços entre estudantes universitários. 
+A plataforma permite que estudantes publiquem e contratem serviços entre si(explicações, design, tradução, programação e revisão de conteúdos) com autenticação por e-mail institucional. 
+O sistema inclui perfis de utilizador, publicação e pesquisa de serviços, sistema de pedidos e avaliações. 
+A implementação utiliza Next.js 14, PostgreSQL e Docker, seguindo metodologia Scrum com documentação UML.
