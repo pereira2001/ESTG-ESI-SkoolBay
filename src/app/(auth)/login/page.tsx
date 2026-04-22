@@ -79,7 +79,7 @@ function LoginForm() {
           <Input id="password" type="password" {...register('password')} />
           {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
           <div className="text-right">
-            <span className="text-sm text-[#6C63FF] cursor-not-allowed opacity-60">
+            <span className="text-sm text-primary cursor-not-allowed opacity-60">
               Esqueci a password
             </span>
           </div>
@@ -89,13 +89,13 @@ function LoginForm() {
           <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded px-3 py-2">{serverError}</p>
         )}
 
-        <Button type="submit" variant="outline" className="w-full" disabled={isSubmitting}>
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? 'A entrar...' : 'Entrar'}
         </Button>
 
         <p className="text-sm text-center text-muted-foreground">
           Não tens conta?{' '}
-          <Link href="/register" className="text-[#6C63FF] underline underline-offset-4 hover:opacity-80">
+          <Link href="/register" className="text-primary underline underline-offset-4 hover:opacity-80">
             Registar
           </Link>
         </p>

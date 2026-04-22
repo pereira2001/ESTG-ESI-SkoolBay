@@ -29,8 +29,10 @@ export default function RegisterPage() {
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormInput>({ resolver: zodResolver(registerFormSchema) })
 
-  async function onSubmit({ confirmPassword: _, ...data }: RegisterFormInput) {
+  async function onSubmit(formData: RegisterFormInput) {
     setServerError(null)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { confirmPassword, ...data } = formData
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -52,9 +54,9 @@ export default function RegisterPage() {
         <p className="text-muted-foreground text-sm">
           Enviámos um link de verificação para o teu e-mail institucional. Clica no link para ativar a conta.
         </p>
-        <Button variant="outline" className="w-full" asChild>
-          <Link href="/login">Ir para o login</Link>
-        </Button>
+        <Link href="/login" className="w-full">
+          <Button variant="outline" className="w-full">Ir para o login</Button>
+        </Link>
       </div>
     )
   }
@@ -110,13 +112,13 @@ export default function RegisterPage() {
           <p className="text-sm text-red-500 bg-red-50 border border-red-200 rounded px-3 py-2">{serverError}</p>
         )}
 
-        <Button type="submit" variant="outline" className="w-full" disabled={isSubmitting}>
+        <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? 'A criar conta...' : 'Criar conta'}
         </Button>
 
         <p className="text-sm text-center text-muted-foreground">
           Já tens conta?{' '}
-          <Link href="/login" className="text-[#6C63FF] underline underline-offset-4 hover:opacity-80">
+          <Link href="/login" className="text-primary underline underline-offset-4 hover:opacity-80">
             Entrar
           </Link>
         </p>
