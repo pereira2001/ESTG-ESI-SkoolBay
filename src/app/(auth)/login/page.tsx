@@ -70,7 +70,7 @@ function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         <div className="space-y-1">
           <Label htmlFor="email">E-mail</Label>
-          <Input id="email" type="email" placeholder="diogo.pereira@estudantes.piaget.pt" {...register('email')} />
+          <Input id="email" type="email" placeholder="diogo.pereira@ipiaget.pt" {...register('email')} />
           {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
         </div>
 

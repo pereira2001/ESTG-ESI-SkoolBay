@@ -79,7 +79,7 @@ export default function RegisterPage() {
 
         <div className="space-y-1">
           <Label htmlFor="email">E-mail institucional</Label>
-          <Input id="email" type="email" placeholder="diogo.pereira@estudantes.piaget.pt" {...register('email')} />
+          <Input id="email" type="email" placeholder="diogo.pereira@ipiaget.pt" {...register('email')} />
           {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
         </div>
 

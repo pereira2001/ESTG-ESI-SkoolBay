@@ -47,15 +47,7 @@ async function main() {
   console.log('✅ Categorias criadas')
 
   const domains = [
-    { domain: 'estudantes.piaget.pt', name: 'Instituto Piaget' },
-    { domain: 'alunos.piaget.pt', name: 'Instituto Piaget' },
-    { domain: 'ipleiria.pt', name: 'Instituto Politécnico de Leiria' },
-    { domain: 'iscte.pt', name: 'ISCTE' },
-    { domain: 'ulisboa.pt', name: 'Universidade de Lisboa' },
-    { domain: 'up.pt', name: 'Universidade do Porto' },
-    { domain: 'uminho.pt', name: 'Universidade do Minho' },
-    { domain: 'ua.pt', name: 'Universidade de Aveiro' },
-    { domain: 'uc.pt', name: 'Universidade de Coimbra' },
+    { domain: 'ipiaget.pt', name: 'Instituto Piaget' },
   ]
   for (const d of domains) {
     await prisma.institutionalDomain.upsert({
@@ -68,11 +60,11 @@ async function main() {
 
   const piageAdminPassword = await bcrypt.hash('Admin123!', 12)
   await prisma.user.upsert({
-    where: { email: 'admin@estudantes.piaget.pt' },
+    where: { email: 'admin@ipiaget.pt' },
     update: {},
     create: {
       name: 'Admin SkoolBay',
-      email: 'admin@estudantes.piaget.pt',
+      email: 'admin@ipiaget.pt',
       password: piageAdminPassword,
       emailVerified: new Date(),
       university: 'Instituto Piaget',
@@ -80,15 +72,15 @@ async function main() {
       role: 'ADMIN',
     },
   })
-  console.log('✅ Admin criado (admin@estudantes.piaget.pt / Admin123!)')
+  console.log('✅ Admin criado (admin@ipiaget.pt / Admin123!)')
 
   const testPassword = await bcrypt.hash('Test123!', 12)
   const testUser = await prisma.user.upsert({
-    where: { email: 'test@estudantes.piaget.pt' },
+    where: { email: 'test@ipiaget.pt' },
     update: {},
     create: {
       name: 'Estudante Teste',
-      email: 'test@estudantes.piaget.pt',
+      email: 'test@ipiaget.pt',
       password: testPassword,
       emailVerified: new Date(),
       university: 'Instituto Piaget',
@@ -96,7 +88,7 @@ async function main() {
       bio: 'Estudante de teste para desenvolvimento.',
     },
   })
-  console.log('✅ Utilizador de teste criado (test@estudantes.piaget.pt / Test123!)')
+  console.log('✅ Utilizador de teste criado (test@ipiaget.pt / Test123!)')
 
   const techCat = await prisma.category.findUnique({ where: { slug: 'tecnologia' } })
   await prisma.service.create({
