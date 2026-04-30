@@ -22,6 +22,13 @@ interface ServicesFiltersProps {
   categories: Category[]
 }
 
+const SORT_OPTIONS = [
+  { value: 'newest', label: 'Mais recente' },
+  { value: 'price_asc', label: 'Preço ↑' },
+  { value: 'rating', label: 'Melhor avaliado' },
+  { value: 'mais_vistos', label: 'Mais vistos' },
+] as const
+
 export function ServicesFilters({ categories }: ServicesFiltersProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -79,6 +86,10 @@ export function ServicesFilters({ categories }: ServicesFiltersProps) {
       <Select
         value={searchParams.get('categoryId') ?? '_all'}
         onValueChange={(v) => handleSelectChange('categoryId', v)}
+        items={[
+          { value: '_all', label: 'Todas as categorias' },
+          ...categories.map((c) => ({ value: c.id, label: c.name })),
+        ]}
       >
         <SelectTrigger className="w-44" aria-label="Filtrar por categoria">
           <SelectValue placeholder="Categoria" />
@@ -109,6 +120,7 @@ export function ServicesFilters({ categories }: ServicesFiltersProps) {
       <Select
         value={searchParams.get('sort') ?? 'newest'}
         onValueChange={(v) => handleSelectChange('sort', v)}
+        items={SORT_OPTIONS}
       >
         <SelectTrigger className="w-44" aria-label="Ordenar por">
           <SelectValue />

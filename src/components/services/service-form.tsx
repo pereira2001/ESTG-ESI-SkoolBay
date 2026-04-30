@@ -234,7 +234,11 @@ export function ServiceForm({ categories, defaultValues, serviceId, mode }: Serv
             control={control}
             name="categoryId"
             render={({ field }) => (
-              <Select value={field.value ?? ''} onValueChange={field.onChange}>
+              <Select
+                value={field.value ?? ''}
+                onValueChange={field.onChange}
+                items={categories.map((c) => ({ value: c.id, label: c.name }))}
+              >
                 <SelectTrigger id="categoryId">
                   <SelectValue placeholder="Seleciona uma categoria" />
                 </SelectTrigger>

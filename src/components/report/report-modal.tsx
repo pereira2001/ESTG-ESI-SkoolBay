@@ -105,6 +105,7 @@ export function ReportModal({ targetType, targetId }: ReportModalProps) {
             <Select
               value={reason}
               onValueChange={(v) => setReason(v as ReasonValue)}
+              items={REASONS}
             >
               <SelectTrigger id="report-reason">
                 <SelectValue placeholder="Seleciona o motivo..." />
