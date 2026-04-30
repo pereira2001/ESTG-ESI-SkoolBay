@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { ServiceCard } from '@/components/services/service-card'
 import { ServicesFilters } from '@/components/services/services-filters'
 import { CategoriesGrid } from '@/components/services/categories-grid'
+import { ServicesPageClient } from '@/components/services/ServicesPageClient'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -115,55 +116,57 @@ export default async function ServicesPage({ searchParams }: PageProps) {
         <ServicesFilters categories={categories} />
       </Suspense>
 
-      {/* Results count */}
-      <p className="text-sm text-muted-foreground mt-6">
-        {total === 0
-          ? 'Nenhum serviço encontrado.'
-          : `${total} ${total === 1 ? 'serviço encontrado' : 'serviços encontrados'}`}
-      </p>
+      <ServicesPageClient categories={categories}>
+        {/* Results count */}
+        <p className="text-sm text-muted-foreground">
+          {total === 0
+            ? 'Nenhum serviço encontrado.'
+            : `${total} ${total === 1 ? 'serviço encontrado' : 'serviços encontrados'}`}
+        </p>
 
-      {services.length === 0 ? (
-        <div className="text-center py-16 space-y-2">
-          <p className="text-muted-foreground">Tenta ajustar os filtros ou pesquisa.</p>
-          <Link href="/services" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
-            Limpar filtros
-          </Link>
-        </div>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-            {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
+        {services.length === 0 ? (
+          <div className="text-center py-16 space-y-2">
+            <p className="text-muted-foreground">Tenta ajustar os filtros ou pesquisa.</p>
+            <Link href="/services" className={cn(buttonVariants({ variant: 'outline', size: 'sm' }))}>
+              Limpar filtros
+            </Link>
           </div>
-
-          {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-10">
-              {page > 1 && (
-                <Link
-                  href={buildPageUrl(page - 1)}
-                  className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Anterior
-                </Link>
-              )}
-              <span className="text-sm text-muted-foreground px-2">
-                Página {page} de {totalPages}
-              </span>
-              {page < totalPages && (
-                <Link
-                  href={buildPageUrl(page + 1)}
-                  className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}
-                >
-                  Seguinte
-                  <ChevronRight className="h-4 w-4" />
-                </Link>
-              )}
+        ) : (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+              {services.map((service) => (
+                <ServiceCard key={service.id} service={service} />
+              ))}
             </div>
-          )}
-        </>
-      )}
+
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-10">
+                {page > 1 && (
+                  <Link
+                    href={buildPageUrl(page - 1)}
+                    className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Anterior
+                  </Link>
+                )}
+                <span className="text-sm text-muted-foreground px-2">
+                  Página {page} de {totalPages}
+                </span>
+                {page < totalPages && (
+                  <Link
+                    href={buildPageUrl(page + 1)}
+                    className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1')}
+                  >
+                    Seguinte
+                    <ChevronRight className="h-4 w-4" />
+                  </Link>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </ServicesPageClient>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
+import { Sparkles, Loader2 } from 'lucide-react'
 import { createServiceSchema, type CreateServiceInput } from '@/lib/validations/service'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,15 +32,27 @@ interface ServiceFormProps {
   mode: 'create' | 'edit'
 }
 
+interface PricingHint {
+  precoSugerido: number
+  precoMinimo: number
+  precoMaximo: number
+  justificacao: string
+  fatoresConsiderados: string[]
+}
+
 export function ServiceForm({ categories, defaultValues, serviceId, mode }: ServiceFormProps) {
   const router = useRouter()
   const [isDeleting, setIsDeleting] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isPricingLoading, setIsPricingLoading] = useState(false)
+  const [pricingHint, setPricingHint] = useState<PricingHint | null>(null)
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<CreateServiceInput>({
     resolver: zodResolver(createServiceSchema),
@@ -72,6 +85,38 @@ export function ServiceForm({ categories, defaultValues, serviceId, mode }: Serv
     toast.success(mode === 'create' ? 'Serviço publicado!' : 'Serviço atualizado!')
     router.push(`/services/${id}`)
     router.refresh()
+  }
+
+  async function handleSuggestPrice() {
+    const { title, description, categoryId } = getValues()
+    if (!title.trim() || !description.trim()) {
+      toast.warning('Preenche o título e a descrição primeiro.')
+      return
+    }
+
+    const categoryName = categories.find((c) => c.id === categoryId)?.name ?? 'outro'
+
+    setIsPricingLoading(true)
+    try {
+      const res = await fetch('/api/ai/price-suggestion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description, category: categoryName }),
+      })
+
+      if (!res.ok) {
+        toast.error('Não foi possível sugerir um preço. Tenta novamente.')
+        return
+      }
+
+      const data = (await res.json()) as PricingHint
+      setValue('price', data.precoSugerido)
+      setPricingHint(data)
+    } catch {
+      toast.error('Erro de ligação. Verifica a tua internet.')
+    } finally {
+      setIsPricingLoading(false)
+    }
   }
 
   async function handleDelete() {
@@ -126,7 +171,22 @@ export function ServiceForm({ categories, defaultValues, serviceId, mode }: Serv
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Preço */}
         <div className="space-y-1">
-          <Label htmlFor="price">Preço (€)</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="price">Preço (€)</Label>
+            <button
+              type="button"
+              onClick={handleSuggestPrice}
+              disabled={isPricingLoading}
+              className="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isPricingLoading ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <Sparkles className="h-3 w-3" />
+              )}
+              {isPricingLoading ? 'A calcular...' : 'Sugerir preço com IA'}
+            </button>
+          </div>
           <Input
             id="price"
             type="number"
@@ -137,6 +197,34 @@ export function ServiceForm({ categories, defaultValues, serviceId, mode }: Serv
             aria-invalid={!!errors.price}
           />
           {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
+
+          {pricingHint && (
+            <div className="rounded-md border border-violet-200 bg-violet-50 p-3 space-y-1 mt-1">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-violet-700">
+                  Sugestão IA: €{pricingHint.precoSugerido.toFixed(2)}
+                  <span className="font-normal text-violet-500 ml-1">
+                    (€{pricingHint.precoMinimo.toFixed(2)} – €{pricingHint.precoMaximo.toFixed(2)})
+                  </span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setPricingHint(null)}
+                  className="text-violet-400 hover:text-violet-600 text-xs"
+                >
+                  ✕
+                </button>
+              </div>
+              <p className="text-xs text-violet-600">{pricingHint.justificacao}</p>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {pricingHint.fatoresConsiderados.map((f) => (
+                  <span key={f} className="text-[10px] bg-violet-100 text-violet-600 rounded px-1.5 py-0.5">
+                    {f}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Categoria */}
