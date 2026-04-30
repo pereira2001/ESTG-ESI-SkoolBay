@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 const LIMIT = 12
 
-type SortKey = 'newest' | 'price_asc' | 'rating'
+type SortKey = 'newest' | 'price_asc' | 'rating' | 'mais_vistos'
 
 interface PageProps {
   searchParams: {
@@ -32,6 +32,7 @@ interface PageProps {
 function buildOrderBy(sort: SortKey) {
   if (sort === 'price_asc') return { price: 'asc' as const }
   if (sort === 'rating') return { user: { rating: 'desc' as const } }
+  if (sort === 'mais_vistos') return { viewCount: 'desc' as const }
   return { createdAt: 'desc' as const }
 }
 
@@ -39,7 +40,7 @@ export default async function ServicesPage({ searchParams }: PageProps) {
   const q = searchParams.q?.trim() ?? ''
   const categoryId = searchParams.categoryId?.trim() ?? ''
   const maxPrice = searchParams.maxPrice ? parseFloat(searchParams.maxPrice) : undefined
-  const sort = (['newest', 'price_asc', 'rating'].includes(searchParams.sort ?? '')
+  const sort = (['newest', 'price_asc', 'rating', 'mais_vistos'].includes(searchParams.sort ?? '')
     ? (searchParams.sort as SortKey)
     : 'newest')
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10))

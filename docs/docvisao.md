@@ -21,7 +21,7 @@ O SkoolBay destina-se a ser utilizado em contexto de ensino superior, nomeadamen
 - Universidades e institutos politécnicos com domínios de e-mail institucional
 - Qualquer instituição de ensino superior cujos estudantes possuam endereço de e-mail académico verificável
 
-O sistema funciona exclusivamente via browser (aplicação web), sem necessidade de instalação de software adicional. Pode ser executado localmente (localhost) para fins de desenvolvimento e demonstração académica, ou em ambiente de produção via Docker.
+O sistema funciona exclusivamente via browser (aplicação web), sem necessidade de instalação de software adicional.
 
 ---
 
@@ -35,6 +35,15 @@ O sistema funciona exclusivamente via browser (aplicação web), sem necessidade
 | Instituições de ensino superior | Stakeholders indiretos | Promover a colaboração entre estudantes e o ecossistema académico |
 | Equipa de desenvolvimento | Produtores do sistema | Entregar um produto funcional e bem documentado |
 
+### Descrição dos Utilizadores
+
+| Utilizador | Descrição | Necessidades Principais |
+|---|---|---|
+| **Estudante Prestador** | Estudante universitário que oferece serviços na plataforma. Pode ter múltiplos serviços ativos em diferentes categorias. | Criar e gerir serviços, receber pedidos, comunicar com clientes, construir reputação através de avaliações |
+| **Estudante Cliente** | Estudante universitário que procura e contrata serviços de outros estudantes. | Pesquisar serviços por categoria/preço/avaliação, contactar prestadores, acompanhar estado dos pedidos, deixar avaliações |
+| **Moderador** | Estudante ou membro da instituição com permissão para moderar conteúdo. | Rever denúncias de serviços e utilizadores, remover conteúdo inadequado, suspender contas problemáticas |
+| **Administrador** | Gestor da plataforma com acesso total ao sistema. | Gerir domínios institucionais, gerir moderadores, monitorizar atividade geral da plataforma |
+
 ---
 
 ## (d) Equipa do Projeto
@@ -43,7 +52,6 @@ O sistema funciona exclusivamente via browser (aplicação web), sem necessidade
 |------|----------------|-------|
 | António Rafael Marques Simões | 2022115742 | Documentação / QA |
 | Diogo Filipe Gonçalves Pereira | 2024115723 | Dev Lead / Scrum Master |
-| Jonathan Henriques Ferreira Alves | 2024111122 | Documentação / UX |
 | Kauã Henrique Santos Pina | 2024126856 | Documentação / UML |
 | Leonardo Alexandre Martins Afonso | 2022111829 | Documentação / Testes |
 | Marinela Suely João Bettencourt | 2024117541 | Documentação / UX |
@@ -143,7 +151,22 @@ graph TB
 
 ---
 
-## (h) Integração LLM (Opcional — Roadmap)
+## (h) Riscos do Projeto
+
+| Risco | Probabilidade | Impacto | Mitigação |
+|-------|:---:|:---:|-----------|
+| **Baixa adoção inicial** — estudantes desconhecem a plataforma ou preferem canais informais (grupos de WhatsApp, Facebook) | Alta | Alto | Integração com instituições parceiras; campanha de divulgação na comunidade académica; seed de serviços reais para demonstração |
+| **Fraude entre utilizadores** — prestador não entrega o serviço acordado ou cliente não paga | Média | Alto | Sistema de avaliações públicas, denúncias com moderação humana, historial de pedidos visível no perfil |
+| **Dependência de domínios institucionais** — instituição altera formato de e-mail ou encerra domínio | Baixa | Alto | Gestão de domínios por administrador via painel; fácil adição/remoção de domínios sem alteração de código |
+| **Avaliações falsas ou manipuladas** — utilizadores criam contas secundárias para inflar avaliações | Média | Médio | Review só possível após pedido concluído; verificação de e-mail obrigatória; moderação de conteúdo suspeito |
+| **Ausência de pagamentos integrados reduz confiança** — sem escrow, o pagamento é acordado fora da plataforma | Alta | Médio | Risco assumido no MVP; comunicar claramente que a plataforma é de contacto e não de pagamento |
+| **Proteção de dados pessoais (RGPD)** — dados de estudantes (e-mail institucional, perfil, histórico) sujeitos a regulamentação europeia | Média | Alto | Não armazenar dados desnecessários; política de privacidade clara; e-mails usados apenas para autenticação |
+| **Escalabilidade** — se adotado por múltiplas instituições, a base de dados e o servidor podem não suportar a carga | Baixa | Médio | Arquitetura Docker facilita migração para cloud; Prisma permite otimização de queries; risco não crítico no MVP académico |
+| **Dependência de serviços externos** — e-mail transacional (Nodemailer/SMTP) ou futuras APIs de LLM podem falhar ou ter custos inesperados | Média | Baixo | E-mail é funcionalidade de verificação, não crítica para uso; LLM isolado em módulo separado e opcional |
+
+---
+
+## (i) Integração LLM (Opcional — Roadmap)
 
 O sistema foi arquitetado para permitir a integração futura de um Large Language Model, isolado num módulo independente (`recommendation_service`). O LLM nunca acede diretamente à base de dados — todas as chamadas passam pelo backend, mantendo controlo sobre dados e custos de API.
 

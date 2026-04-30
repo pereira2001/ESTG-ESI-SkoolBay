@@ -9,6 +9,7 @@ import { Separator } from '@/components/ui/separator'
 import { ServiceActions } from '@/components/services/service-actions'
 import { ReportModal } from '@/components/report/report-modal'
 import { Euro, Star, CheckCircle2, XCircle } from 'lucide-react'
+import { recordServiceView } from '@/actions/views'
 
 interface ServicePageProps {
   params: { id: string }
@@ -93,6 +94,8 @@ export default async function ServicePage({ params }: ServicePageProps) {
   ])
 
   if (!service) notFound()
+
+  await recordServiceView(params.id)
 
   const isOwner = session?.user?.id === service.userId
   const isAuthenticated = !!session?.user

@@ -117,6 +117,7 @@ export function ServicesFilters({ categories }: ServicesFiltersProps) {
           <SelectItem value="newest">Mais recente</SelectItem>
           <SelectItem value="price_asc">Preço ↑</SelectItem>
           <SelectItem value="rating">Melhor avaliado</SelectItem>
+          <SelectItem value="mais_vistos">Mais vistos</SelectItem>
         </SelectContent>
       </Select>
     </div>
