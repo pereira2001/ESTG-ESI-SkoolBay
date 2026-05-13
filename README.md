@@ -16,7 +16,6 @@ Projeto desenvolvido no âmbito da cadeira de **Engenharia de Software I** — I
 |------|----------------|
 | António Rafael Marques Simões | 2022115742 |
 | Diogo Filipe Gonçalves Pereira | 2024115723 |
-| Jonathan Henriques Ferreira Alves | 2024111122 |
 | Kauã Henrique Santos Pina | 2024126856 |
 | Leonardo Alexandre Martins Afonso | 2022111829 |
 | Marinela Suely João Bettencourt | 2024117541 |

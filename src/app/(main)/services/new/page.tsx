@@ -16,8 +16,8 @@ export default async function NewServicePage() {
   })
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <div className="mb-8">
+    <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">
+      <div>
         <h1 className="text-2xl font-bold">Publicar serviço</h1>
         <p className="text-muted-foreground text-sm mt-1">
           Descreve o que ofereces para outros estudantes encontrarem.

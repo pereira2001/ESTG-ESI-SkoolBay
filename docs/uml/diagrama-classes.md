@@ -8,8 +8,7 @@
 
 ```mermaid
 classDiagram
-    class User {
-        +String id
+    class User {        
         +String name
         +String email
         +String passwordHash
@@ -27,8 +26,7 @@ classDiagram
         +calculateRating()
     }
 
-    class Service {
-        +String id
+    class Service {        
         +String title
         +String description
         +Float price
@@ -41,8 +39,7 @@ classDiagram
         +remove()
     }
 
-    class ServiceRequest {
-        +String id
+    class ServiceRequest {        
         +String message
         +RequestStatus status
         +DateTime createdAt
@@ -54,8 +51,7 @@ classDiagram
         +cancel()
     }
 
-    class Review {
-        +String id
+    class Review {        
         +Int rating
         +String comment
         +DateTime createdAt
@@ -63,15 +59,13 @@ classDiagram
         +submit()
     }
 
-    class Category {
-        +String id
+    class Category {        
         +String name
         +String slug
         +String icon
     }
 
     class Report {
-        +String id
         +TargetType targetType
         +String targetId
         +String reason

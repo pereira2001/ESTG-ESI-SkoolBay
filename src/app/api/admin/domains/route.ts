@@ -7,7 +7,7 @@ const createDomainSchema = z.object({
   domain: z
     .string()
     .min(3)
-    .regex(/^[a-z0-9.-]+\.[a-z]{2,}$/, 'Domínio inválido (ex: estudantes.piaget.pt)'),
+    .regex(/^[a-z0-9.-]+\.[a-z]{2,}$/, 'Domínio inválido (ex: ipiaget.pt)'),
   name: z.string().min(2, 'Nome da instituição obrigatório'),
 })
 

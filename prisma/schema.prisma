@@ -9,6 +9,7 @@ datasource db {
 
 enum Role {
   USER
+  MODERATOR
   ADMIN
 }
 
@@ -81,10 +82,26 @@ model Service {
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   categoryId String?
   category   Category? @relation(fields: [categoryId], references: [id])
+  viewCount  Int      @default(0)
   requests   ServiceRequest[]
   reports    Report[]  @relation("ServiceReports")
+  views      ServiceView[]
 
   @@map("services")
+}
+
+model ServiceView {
+  id          String   @id @default(cuid())
+  serviceId   String
+  fingerprint String
+  viewedAt    DateTime @default(now())
+
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@unique([serviceId, fingerprint])
+  @@index([serviceId])
+  @@index([viewedAt])
+  @@map("service_views")
 }
 
 model ServiceRequest {
