@@ -38,7 +38,6 @@ async function main() {
   // ── Domínios institucionais ───────────────────────────────────────────────
   const domains = [
     { domain: 'ipiaget.pt', name: 'Instituto Piaget (Staff)' },
-    { domain: 'estudantes.piaget.pt', name: 'Instituto Piaget (Estudantes)' },
   ]
   for (const d of domains) {
     await prisma.institutionalDomain.upsert({
@@ -53,11 +52,11 @@ async function main() {
   const adminHash = await bcrypt.hash('Admin123!', 12)
 
   await prisma.user.upsert({
-    where: { email: 'admin@estudantes.piaget.pt' },
+    where: { email: 'admin@ipiaget.pt' },
     update: {},
     create: {
       name: 'Admin SkoolBay',
-      email: 'admin@estudantes.piaget.pt',
+      email: 'admin@ipiaget.pt',
       password: adminHash,
       emailVerified: new Date(),
       university: 'Instituto Piaget',
@@ -65,15 +64,15 @@ async function main() {
       role: 'ADMIN',
     },
   })
-  console.log('✅ Admin criado (admin@estudantes.piaget.pt / Admin123!)')
+  console.log('✅ Admin criado (admin@ipiaget.pt / Admin123!)')
 
   const testHash = await bcrypt.hash('Test123!', 12)
   await prisma.user.upsert({
-    where: { email: 'test@estudantes.piaget.pt' },
+    where: { email: 'test@ipiaget.pt' },
     update: {},
     create: {
       name: 'Estudante Teste',
-      email: 'test@estudantes.piaget.pt',
+      email: 'test@ipiaget.pt',
       password: testHash,
       emailVerified: new Date(),
       university: 'Instituto Piaget',
@@ -81,7 +80,7 @@ async function main() {
       bio: 'Estudante de teste para desenvolvimento.',
     },
   })
-  console.log('✅ Utilizador de teste criado (test@estudantes.piaget.pt / Test123!)')
+  console.log('✅ Utilizador de teste criado (test@ipiaget.pt / Test123!)')
 
   // ── 11 utilizadores com 5 serviços cada ──────────────────────────────────
   type ServiceDef = {
@@ -103,7 +102,7 @@ async function main() {
   const seedUsers: UserDef[] = [
     {
       name: 'João Silva',
-      email: 'joao.silva@estudantes.piaget.pt',
+      email: 'joao.silva@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Engenharia Informática',
       bio: 'Apaixonado por programação e sistemas distribuídos. Tenho experiência em Python, Java e desenvolvimento web.',
@@ -142,7 +141,7 @@ async function main() {
     },
     {
       name: 'Ana Rodrigues',
-      email: 'ana.rodrigues@estudantes.piaget.pt',
+      email: 'ana.rodrigues@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Design de Comunicação',
       bio: 'Designer focada em identidade visual e comunicação digital. Trabalho com Adobe Creative Suite e Figma.',
@@ -181,7 +180,7 @@ async function main() {
     },
     {
       name: 'Mariana Santos',
-      email: 'mariana.santos@estudantes.piaget.pt',
+      email: 'mariana.santos@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Psicologia',
       bio: 'Estudante de Psicologia com formação em técnicas de relaxamento e gestão de stress académico.',
@@ -220,7 +219,7 @@ async function main() {
     },
     {
       name: 'Pedro Ferreira',
-      email: 'pedro.ferreira@estudantes.piaget.pt',
+      email: 'pedro.ferreira@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Gestão de Empresas',
       bio: 'Estudante de Gestão com experiência em análise financeira e modelação em Excel. Estágio em consultoria.',
@@ -259,7 +258,7 @@ async function main() {
     },
     {
       name: 'Inês Carvalho',
-      email: 'ines.carvalho@estudantes.piaget.pt',
+      email: 'ines.carvalho@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Engenharia Civil',
       bio: 'Estudante de Engenharia Civil com forte base em Matemática e Física. Tutora voluntária desde o 1º ano.',
@@ -298,7 +297,7 @@ async function main() {
     },
     {
       name: 'Miguel Costa',
-      email: 'miguel.costa@estudantes.piaget.pt',
+      email: 'miguel.costa@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Tradução e Interpretação',
       bio: 'Estudante de Tradução com fluência em inglês, francês e espanhol. Traduções técnicas e académicas.',
@@ -337,7 +336,7 @@ async function main() {
     },
     {
       name: 'Sofia Martins',
-      email: 'sofia.martins@estudantes.piaget.pt',
+      email: 'sofia.martins@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Música',
       bio: 'Estudante de Música com 10 anos de piano e formação em teoria musical. Professora de piano desde os 17.',
@@ -376,7 +375,7 @@ async function main() {
     },
     {
       name: 'Rui Oliveira',
-      email: 'rui.oliveira@estudantes.piaget.pt',
+      email: 'rui.oliveira@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Ciências do Desporto',
       bio: 'Estudante de Ciências do Desporto e personal trainer certificado. Especializado em treino funcional e nutrição desportiva.',
@@ -415,7 +414,7 @@ async function main() {
     },
     {
       name: 'Catarina Sousa',
-      email: 'catarina.sousa@estudantes.piaget.pt',
+      email: 'catarina.sousa@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Marketing',
       bio: 'Estudante de Marketing com experiência em gestão de redes sociais e criação de conteúdo digital.',
@@ -454,7 +453,7 @@ async function main() {
     },
     {
       name: 'Bruno Lopes',
-      email: 'bruno.lopes@estudantes.piaget.pt',
+      email: 'bruno.lopes@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Biologia',
       bio: 'Estudante de Biologia com gosto por ensinar ciências. Explicador voluntário desde o ensino secundário.',
@@ -493,7 +492,7 @@ async function main() {
     },
     {
       name: 'Beatriz Nunes',
-      email: 'beatriz.nunes@estudantes.piaget.pt',
+      email: 'beatriz.nunes@ipiaget.pt',
       university: 'Instituto Piaget',
       course: 'Direito',
       bio: 'Estudante de Direito com forte capacidade de análise jurídica e redação académica. Membro da clínica jurídica.',

@@ -73,7 +73,7 @@ export default function RegisterPage() {
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
         <div className="space-y-1">
           <Label htmlFor="name">Nome completo</Label>
-          <Input id="name" placeholder="Diogo Pereira" {...register('name')} />
+          <Input id="name" {...register('name')} />
           {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
         </div>
 
@@ -86,12 +86,12 @@ export default function RegisterPage() {
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
             <Label htmlFor="university">Universidade</Label>
-            <Input id="university" placeholder="Piaget" {...register('university')} />
+            <Input id="university" {...register('university')} />
             {errors.university && <p className="text-sm text-red-500">{errors.university.message}</p>}
           </div>
           <div className="space-y-1">
             <Label htmlFor="course">Curso</Label>
-            <Input id="course" placeholder="Eng. Informática" {...register('course')} />
+            <Input id="course" {...register('course')} />
             {errors.course && <p className="text-sm text-red-500">{errors.course.message}</p>}
           </div>
         </div>

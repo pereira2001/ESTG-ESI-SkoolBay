@@ -22,16 +22,17 @@ interface GroqSearchResult {
 }
 
 const VALID_CATEGORIES = [
-  'explicacoes',
+  'tecnologia',
   'design',
-  'programacao',
-  'traducao',
-  'fotografia',
-  'edicao-video',
-  'marketing',
-  'contabilidade',
   'idiomas',
-  'outro',
+  'tutoria',
+  'musica',
+  'fotografia',
+  'escrita',
+  'ciencias',
+  'artes',
+  'desporto',
+  'outros',
 ] as const
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
 Extrai:
 - keywords: array de 2-5 palavras-chave relevantes em português
-- categoria: uma de [explicacoes, design, programacao, traducao, fotografia, edicao-video, marketing, contabilidade, idiomas, outro]
+- categoria: uma de [tecnologia, design, idiomas, tutoria, musica, fotografia, escrita, ciencias, artes, desporto, outros]
 - intencao: string curta descrevendo o que o utilizador quer (máx 60 chars)
 - termosAdicionais: array de sinónimos ou termos relacionados (máx 3)
 
@@ -91,43 +92,55 @@ Responde APENAS com JSON válido, sem markdown, sem texto extra.`
     )
   }
 
-  const { keywords = [], categoria = 'outro', intencao = query, termosAdicionais = [] } = extracted
+  const { keywords = [], categoria = 'outros', intencao = query, termosAdicionais = [] } = extracted
   const allTerms = [...keywords, ...termosAdicionais].filter(Boolean)
+
+  const isValidCategory = VALID_CATEGORIES.includes(
+    categoria as (typeof VALID_CATEGORIES)[number],
+  )
+
+  if (allTerms.length === 0) allTerms.push(query)
 
   const orConditions = allTerms.flatMap((term) => [
     { title: { contains: term, mode: 'insensitive' as const } },
     { description: { contains: term, mode: 'insensitive' as const } },
   ])
 
-  const isValidCategory = VALID_CATEGORIES.includes(
-    categoria as (typeof VALID_CATEGORIES)[number],
-  )
+  if (isValidCategory && categoria !== 'outros') {
+    orConditions.push({ category: { slug: categoria } } as never)
+  }
 
   const services = await prisma.service.findMany({
     where: {
       isActive: true,
       ...(orConditions.length > 0 ? { OR: orConditions } : {}),
-      ...(isValidCategory && categoria !== 'outro'
-        ? { category: { slug: categoria } }
-        : {}),
     },
     select: {
       id: true,
       title: true,
       price: true,
-      category: { select: { name: true } },
+      category: { select: { name: true, slug: true } },
       user: { select: { id: true, name: true, avatarUrl: true, rating: true } },
     },
     orderBy: { createdAt: 'desc' },
-    take: 12,
+    take: 24,
   })
 
-  const meta: SearchMeta = {
-    intencao,
-    categoria,
-    keywords,
-    termosAdicionais,
-  }
+  const ranked = isValidCategory && categoria !== 'outros'
+    ? [...services].sort((a, b) => {
+        const aMatch = a.category?.slug === categoria ? 1 : 0
+        const bMatch = b.category?.slug === categoria ? 1 : 0
+        return bMatch - aMatch
+      })
+    : services
 
-  return NextResponse.json({ results: services, meta, total: services.length })
+  const finalResults = ranked.slice(0, 12)
+
+  const meta: SearchMeta = { intencao, categoria, keywords, termosAdicionais }
+
+  return NextResponse.json({
+    results: finalResults,
+    meta,
+    total: finalResults.length,
+  })
 }

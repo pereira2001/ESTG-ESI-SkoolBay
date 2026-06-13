@@ -22,7 +22,7 @@ export function ServicesPageClient({ categories, children }: ServicesPageClientP
   return (
     <div>
       <div className="mt-4">
-        <p className="text-xs text-muted-foreground mb-2">ou pesquisa por linguagem natural</p>
+        <p className="text-xs text-muted-foreground mb-2">🔎 Pesquisa inteligente — descreve por palavras o que precisas</p>
         <SmartSearchBar categories={categories} onAiResults={handleAiResults} />
       </div>
 
