@@ -38,6 +38,7 @@ async function main() {
   // ── Domínios institucionais ───────────────────────────────────────────────
   const domains = [
     { domain: 'ipiaget.pt', name: 'Instituto Piaget (Staff)' },
+    { domain: 'skoolbay.com', name: 'SkoolBay' },
   ]
   for (const d of domains) {
     await prisma.institutionalDomain.upsert({
@@ -65,6 +66,23 @@ async function main() {
     },
   })
   console.log('✅ Admin criado (admin@ipiaget.pt / Admin123!)')
+
+  const adminSkoolbayHash = await bcrypt.hash('skoolbay', 12)
+  await prisma.user.upsert({
+    where: { email: 'administrator@skoolbay.com' },
+    update: {},
+    create: {
+      name: 'Administrator',
+      email: 'administrator@skoolbay.com',
+      password: adminSkoolbayHash,
+      emailVerified: new Date(),
+      isActive: true,
+      university: 'SkoolBay',
+      course: 'Administração',
+      role: 'ADMIN',
+    },
+  })
+  console.log('✅ Admin SkoolBay criado (administrator@skoolbay.com / skoolbay)')
 
   const testHash = await bcrypt.hash('Test123!', 12)
   await prisma.user.upsert({

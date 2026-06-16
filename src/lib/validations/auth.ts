@@ -7,6 +7,7 @@ export const INSTITUTIONAL_DOMAINS = [
   'estudantes.piaget.pt',
   'ipleiria.pt',
   'ulisboa.pt',
+  'skoolbay.com',
 ] as const
 
 function isInstitutionalEmail(email: string): boolean {

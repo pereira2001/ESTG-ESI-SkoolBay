@@ -83,15 +83,34 @@ export function ReportModal({ targetType, targetId }: ReportModalProps) {
 
   const targetLabel = targetType === 'SERVICE' ? 'serviço' : 'utilizador'
 
+  // O popup do Select (Base UI) é portado para o body, fora do DialogContent.
+  // O focus-trap do Radix Dialog fecharia/roubaria o foco ao popup; quando a
+  // interação ocorre dentro do popup, impedimos o Radix de reagir.
+  const isInsideSelectPopup = (event: { detail: { originalEvent: Event } }) => {
+    const target = event.detail.originalEvent.target
+    return target instanceof Element && target.closest('[data-slot="select-content"]') !== null
+  }
+
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange} modal={false}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="gap-1.5 text-muted-foreground hover:text-destructive">
           <Flag className="h-3.5 w-3.5" />
           Denunciar
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent
+        className="sm:max-w-md"
+        onPointerDownOutside={(e) => {
+          if (isInsideSelectPopup(e)) e.preventDefault()
+        }}
+        onInteractOutside={(e) => {
+          if (isInsideSelectPopup(e)) e.preventDefault()
+        }}
+        onFocusOutside={(e) => {
+          if (isInsideSelectPopup(e)) e.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Denunciar {targetLabel}</DialogTitle>
           <DialogDescription>
